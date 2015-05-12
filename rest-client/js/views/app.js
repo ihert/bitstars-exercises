@@ -3,7 +3,7 @@ define([
     'underscore',
     'backbone',
     'views/item'
-  ], function($, _, Backbone, ItemView){
+], function($, _, Backbone, ItemView){
 
     var AppView = Backbone.View.extend({
 
@@ -21,9 +21,7 @@ define([
             this.collection.fetch();
         },
 
-        render: function() {
-        },
-
+        // render one item from collection
         renderOne: function(item) {
             console.log('renderOne');
             var view = new ItemView({model:item});
