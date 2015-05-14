@@ -23,7 +23,6 @@ define([
         },
 
         initialize: function() {
-            console.log(this.model.id);
             this.listenTo(this.model, 'change', this.render);
             // the view should remove itself in case the model is
             // destroyed via a collection method
