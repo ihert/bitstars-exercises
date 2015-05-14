@@ -17,15 +17,12 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
     <style>
-        #item-list {
-        }
+        #item-list {}
         #item-list li {
             list-style-type: none;
             padding-top: 10px;
-            padding-left: 5px;
             font-size: 24px;
             position: relative;
-            margin: 0 0 0 14px;
         }
         #item-list li .del {
             display: none;
@@ -39,18 +36,11 @@
             margin: auto 0;
             padding: 2px 4px;
         }
-        #item-list li .edit{
-            display: none;
-        }
-        #item-list li.editing .edit {
-            display: block;
-            width: 359px;
-            margin-left: -3px;
-        }
-        #item-list li.editing .view {
-            display: none;
-        }
+        #item-list li .edit{display: none;}
+        #item-list li.editing .edit {display: block;}
+        #item-list li.editing .view {display: none;}
         #item-list li:hover .del {display: block;}
+        .wrapper{padding-top: 10px; padding-bottom: 10px;}
     </style>
 </head>
 <body>
@@ -58,20 +48,36 @@
         <header>
             <div class="container">
                 <h1 class="text-center">REST Client</h1>
-                <div class="container">
                     <div class="row">
-                        <div class="col-md-4 col-md-offset-4">
-                            <input id="add" type="text" class="form-control" placeholder="type and press ENTER to add an item">
+                        <div class="col-md-6 col-md-offset-3">
+                            <input id="add" type="text" class="form-control" placeholder="type and press ENTER to create new item">
+                            <div class="wrapper">
+                                <div class="btn-group pull-left" role="group" aria-label="...">
+                                    <button type="button" class="btn btn-default">
+                                        <span class="glyphicon glyphicon-sort-by-alphabet" aria-hidden="true"></span>
+                                    </button>
+                                    <button type="button" class="btn btn-default">
+                                        <span class="glyphicon glyphicon-sort-by-alphabet-alt" aria-hidden="true"></span>
+                                    </button>
+                                </div>
+                                <div class="btn-group pull-right" role="group" aria-label="...">
+                                    <button type="button" class="btn btn-default">
+                                        <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                                    </button>
+                                    <button type="button" class="btn btn-default">
+                                        <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
         </header>
         <main>
             <section>
                 <div class="container">
                     <div class="row">
-                        <div class="col-md-4 col-md-offset-4">
+                        <div class="col-md-6 col-md-offset-3">
                             <ul id="item-list" class="list-group">
                             </ul>
                         </div>
@@ -82,7 +88,7 @@
         <footer>
             <div class="container">
                 <div class="row">
-                    <div class="col-md-4 col-md-offset-4">
+                    <div class="col-md-6 col-md-offset-3">
                         <p class="text-center">* click on item to edit</p>
                         <p class="text-center">** press ESC to cancel editing</p>
                     </div>
