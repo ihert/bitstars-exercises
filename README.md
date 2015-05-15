@@ -104,6 +104,7 @@ TODO:
 
   q. How does event­-bubbling work in JS?
 
+>The event bubbling process starts by executing the event handler defined for individual elements at the lowest level (e.g. hyperlinks, buttons etc.). From there, the event bubbles up to the containing elements (e.g. a table or a form with its own event handler), then up to even higher-level elements (e.g. the BODY element of the page). Finally, the event ends up being handled at the highest level in the DOM hierarchy, the document element itself (provided that your document has its own event handler). 
 
   r. What is preferred way to create a new Object/Array in JS? 
 
