@@ -25,14 +25,23 @@ TODO:
 # QA's
 ### 1. General questions
   a.   Explain why a system should be separated into independent, only loosely coupled components?
+
   b. Explain all S.O.L.I.D Programming Principles?
+
   c. What is use­-case-­driven development and why is it a good idea to follow specific use cases instead of implementing functionality because it might become handy later?
+
   d. Why is it good to “fail fast”? 
+
   e. What is the law of demeter and why is it important? 
+
   f. Why is it a good idea to separate creational logic (application logic managing the creation of objects) from business logic?  
+
   g. Why are long methods a sign of bad design? 
-  h. Explain what the idea behind a listener is. When is an event­driven architecture useful and when not? 
-  i. What are factories and builders and what is dependency injection?  
+
+  h. Explain what the idea behind a listener is. When is an event­driven architecture useful and when not?
+
+  i. What are factories and builders and what is dependency injection? 
+   
   j. What is the difference between GIT and SVN? What are git branches?
 
 >GIT is distributed, SVN is not. A branch represents an independent line of development.
@@ -101,7 +110,7 @@ TODO:
   s. What are some important JS­-specific patterns? 
 
   t. How does module­-loading currently work in JS? What are the most common patterns? 
-  
+
   u. What are “promises” in JS
 
 >The core idea behind promises is that a promise represents the result of an 
