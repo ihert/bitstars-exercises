@@ -24,7 +24,7 @@ TODO:
 
 # QA's
 ### 1. General questions
-  a. Explain why a system should be separated into independent, only loosely coupled components?
+  a.   Explain why a system should be separated into independent, only loosely coupled components?
   b. Explain all S.O.L.I.D Programming Principles?
   c. What is use­-case-­driven development and why is it a good idea to follow specific use cases instead of implementing functionality because it might become handy later?
   d. Why is it good to “fail fast”? 
@@ -38,9 +38,12 @@ TODO:
 >GIT is distributed, SVN is not. A branch represents an independent line of development.
 
 ### 2. Javascript (JS) questions
-  a. How does inheritance work in JS? 
+  a. How does inheritance work in JS?
+
   b. How is it different from the inheritance pattern like Java? 
+
   c. How does the keyword “this” work in JS? What are the differences to “this” in languages like Java? 
+
   d. What is “scope” in JS?
 
   >In JavaScript, scope is the set of variables, objects, and functions you have access to.
@@ -94,8 +97,11 @@ TODO:
 
 
   r. What is preferred way to create a new Object/Array in JS? 
+
   s. What are some important JS­-specific patterns? 
+
   t. How does module­-loading currently work in JS? What are the most common patterns? 
+  
   u. What are “promises” in JS
 
 >The core idea behind promises is that a promise represents the result of an 
