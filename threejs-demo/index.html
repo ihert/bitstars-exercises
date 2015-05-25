@@ -59,13 +59,10 @@
         camera = new THREE.PerspectiveCamera(
                 40, window.innerWidth / window.innerHeight, 1, 10000
         );
-        //camera.position.y = 80;
-       // camera.position.z = 400;
+
         camera.position.x = radius * Math.sin( theta * Math.PI / 360 ) * Math.cos( phi * Math.PI / 360 );
         camera.position.y = radius * Math.sin( phi * Math.PI / 360 );
         camera.position.z = radius * Math.cos( theta * Math.PI / 360 ) * Math.cos( phi * Math.PI / 360 );
-        //camera.target.position.y = 200;
-
 
         camera.lookAt(scene.position)
 
@@ -75,12 +72,9 @@
                 new THREE.Color(0x0f0f0f),
                 new THREE.Color(0x0f0f0f)
         );
-        gridXZ.position.set( 0,0, 0);
+        gridXZ.position.set( 0, 0, 0);
+
         scene.add(gridXZ);
-
-
-
-
 
         initUI();
         initUIEvents();
@@ -201,17 +195,12 @@
         onMouseDownPhi = phi;
         onMouseDownPosition.x = event.clientX;
         onMouseDownPosition.y = event.clientY;
-//
-//        mouseXOnMouseDown = event.clientX - sizeX;
-//        targetRotationOnMouseDownX = targetRotationX;
-//
-//        mouseYOnMouseDown = event.clientY - sizeY;
-//        targetRotationOnMouseDownY = targetRotationY;
-        mouse = new THREE.Vector3(2*(event.clientX / window.innerWidth) - 1,
-        1 - 2 * (event.clientY / window.innerHeight));
 
-        //var projector = new THREE.Projector();
-        //projector.pickingRay(mouseVektor.clone(), camera);
+        mouse = new THREE.Vector3(
+                2*(onMouseDownPosition.x / window.innerWidth) - 1,
+                1 - 2 * (onMouseDownPosition.y / window.innerHeight)
+        );
+
         raycaster.setFromCamera(mouse, camera);
         var intersects = raycaster.intersectObjects( objects );
 
@@ -221,52 +210,38 @@
             controller.mx = object.position.x;
             controller.my = object.position.y;
             controller.mz = object.position.z;
-
-
-
-            console.log(object);
-
         }
 
     }
 
     function onMouseMove( event ) {
 
+        if ( isMouseDown ) {
 
-//        targetRotationY = targetRotationOnMouseDownY + (mouseY - mouseYOnMouseDown) * 0.02;
-//        targetRotationX = targetRotationOnMouseDownX + (mouseX - mouseXOnMouseDown) * 0.02;
+            theta = - (( event.clientX - onMouseDownPosition.x ) * 0.5 ) + onMouseDownTheta;
+            phi = (( event.clientY - onMouseDownPosition.y ) * 0.5 ) + onMouseDownPhi;
+
+            phi = Math.min( 180, Math.max( 0, phi ));
+
+            camera.position.x = radius * Math.sin( theta * Math.PI / 360 ) * Math.cos( phi * Math.PI / 360 );
+            camera.position.y = radius * Math.sin( phi * Math.PI / 360 );
+            camera.position.z = radius * Math.cos( theta * Math.PI / 360 ) * Math.cos( phi * Math.PI / 360 );
+
+            camera.lookAt(scene.position);
+        }
 
         mouse = new THREE.Vector3(
                 2*(event.clientX / window.innerWidth) - 1,
                 1 - 2 * (event.clientY / window.innerHeight)
         );
 
-
-        if ( isMouseDown ) {
-
-            theta = - ( ( event.clientX - onMouseDownPosition.x ) * 0.5 ) + onMouseDownTheta;
-            phi = ( ( event.clientY - onMouseDownPosition.y ) * 0.5 ) + onMouseDownPhi;
-
-            phi = Math.min( 180, Math.max( 0, phi ) );
-
-            camera.position.x = radius * Math.sin( theta * Math.PI / 360 ) * Math.cos( phi * Math.PI / 360 );
-            camera.position.y = radius * Math.sin( phi * Math.PI / 360 );
-            camera.position.z = radius * Math.cos( theta * Math.PI / 360 ) * Math.cos( phi * Math.PI / 360 );
-            //camera.updateMatrix();
-            camera.lookAt(scene.position);
-        }
-
-        //var projector = new THREE.Projector();
-        //projector.pickingRay(mouseVektor.clone(), camera);
         raycaster.setFromCamera(mouse, camera);
         var intersects = raycaster.intersectObjects( objects );
 
         if (intersects.length) {
             container.style.cursor = 'pointer';
-            console.log('sss');
         } else {
             container.style.cursor = 'default';
-
         }
     }
 
