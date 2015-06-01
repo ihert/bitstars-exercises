@@ -9,29 +9,18 @@
 </head>
 <body>
 
+<script src="js/q.js"></script>
 <script src="js/dat.gui.min.js"></script>
 <script src="js/three.min.js"></script>
+<script src="js/ColladaLoader.js"></script>
 <script>
 (function () {
     'use strict';
 
-    var scene,
-        camera,
-        renderer,
-        container,
-        controller,
-        newObj,
-        objects = [],
-        isMouseDown,
-        object = undefined,
-        onMouseDownPosition = new THREE.Vector2(),
-        radius = 400,
-        theta = 45,
-        onMouseDownTheta = 45,
-        phi = 60,
-        onMouseDownPhi = 60,
-        mouse,
-        raycaster = new THREE.Raycaster();
+    var scene, camera, renderer, container, controller, newObj, objects = [],
+        isMouseDown, object = undefined, onMouseDownPosition = new THREE.Vector2(),
+        radius = 400, theta = 45, onMouseDownTheta = 45, phi = 60,
+        onMouseDownPhi = 60, mouse, raycaster = new THREE.Raycaster();
 
     // Initialize the scene
     init();
@@ -77,12 +66,11 @@
         scene.add(gridXZ);
 
         initUI();
-        initUIEvents();
     }
 
     function initUI() {
-        controller = {
 
+        controller = {
             addSphere: function () {
                 addSphere();
             },
@@ -93,39 +81,91 @@
                 addCylinder()
             },
 
-            ry: 0.0,
-            rz: 0.0,
-            rx: 0.0,
+            ry: 0.0, rz: 0.0, rx: 0.0,
 
-            my: 0.0,
-            mz: 0.0,
-            mx: 0.0
+            my: 0.0, mz: 0.0, mx: 0.0
         };
 
         var gui = new dat.GUI();
-        var h = gui.addFolder("add new object");
+        var h = gui.addFolder('add new object');
         h.add(controller, 'addSphere').name('new sphere');
         h.add(controller, 'addBox').name('new cube');
         h.add(controller, 'addCylinder').name('new cylinder');
 
+        h = gui.addFolder('object actions');
+        h.add(controller, 'rx', -180.0, 180.0, 0.025).name('rotate x').listen();
+        h.add(controller, 'ry', -180.0, 180.0, 0.025).name('rotate y').listen();
+        h.add(controller, 'rz', -180.0, 180.0, 0.025).name('rotate z').listen();
 
-        h = gui.addFolder("object actions");
-        h.add(controller, "rx", -180.0, 180.0, 0.025).name("rotate x").listen();
-        h.add(controller, "ry", -180.0, 180.0, 0.025).name("rotate y").listen();
-        h.add(controller, "rz", -180.0, 180.0, 0.025).name("rotate z").listen();
-
-        h.add(controller, "mx", -100.0, 100.0, 0.025).name("move x").listen();
-        h.add(controller, "my", -100.0, 100.0, 0.025).name("move y").listen();
-        h.add(controller, "mz", -100.0, 100.0, 0.025).name("move z").listen();
-    }
-
-    function initUIEvents() {
+        h.add(controller, 'mx', -100.0, 100.0, 0.025).name('move x').listen();
+        h.add(controller, 'my', -100.0, 100.0, 0.025).name('move y').listen();
+        h.add(controller, 'mz', -100.0, 100.0, 0.025).name('move z').listen();
 
         container.addEventListener( 'mousedown', onMouseDown, false );
         container.addEventListener( 'mousemove', onMouseMove, false );
         container.addEventListener( 'mouseup', onMouseUp, false );
+        container.addEventListener( 'drop', onFileDrop, false );
+
+        container.addEventListener(
+                'dragover',
+                function(event) {
+                    event.preventDefault();
+                },
+                false
+        );
 
         window.addEventListener( 'resize', onWindowResize, false );
+    }
+
+    function loadFile( files ){
+
+        // a promise
+        var deferred = Q.defer();
+        if ( files.length > 0 ) {
+            // select only 1st file
+            var file = files[0];
+            if (typeof FileReader !== 'undefined') {
+                var reader = new FileReader();
+                reader.onload = function (evt) {
+                    // resolve the promise
+                    deferred.resolve( evt.target.result );
+                };
+                reader.readAsText( file );
+            }
+        } else{
+            deferred.reject(new Error('File not found'));
+        }
+        return deferred.promise;
+    }
+
+    function parseModel( responseText ){
+        var deferred = Q.defer();
+        var xmlParser = new DOMParser();
+        var responseXML = xmlParser.parseFromString(responseText, 'application/xml' );
+
+        var loader = new THREE.ColladaLoader();
+        loader.options.convertUpAxis = true;
+        loader.parse(responseXML, function(collada){
+            deferred.resolve(collada);
+        });
+
+        return deferred.promise;
+    }
+
+    function loadIntoCanvas( collada ) {
+        var dae = collada.scene;
+        dae.scale.x = dae.scale.y = dae.scale.z = 20;
+        scene.add(dae);
+    }
+
+    function onFileDrop( event ) {
+        event.preventDefault();
+
+        var files = event.dataTransfer.files;
+
+        loadFile( files )
+                .then( parseModel )
+                .then( loadIntoCanvas );
     }
 
     function addSphere() {
@@ -228,20 +268,21 @@
             camera.position.z = radius * Math.cos( theta * Math.PI / 360 ) * Math.cos( phi * Math.PI / 360 );
 
             camera.lookAt(scene.position);
-        }
-
-        mouse = new THREE.Vector3(
-                2*(event.clientX / window.innerWidth) - 1,
-                1 - 2 * (event.clientY / window.innerHeight)
-        );
-
-        raycaster.setFromCamera(mouse, camera);
-        var intersects = raycaster.intersectObjects( objects );
-
-        if (intersects.length) {
-            container.style.cursor = 'pointer';
         } else {
-            container.style.cursor = 'default';
+
+            mouse = new THREE.Vector3(
+                    2 * (event.clientX / window.innerWidth) - 1,
+                    1 - 2 * (event.clientY / window.innerHeight)
+            );
+
+            raycaster.setFromCamera(mouse, camera);
+            var intersects = raycaster.intersectObjects(objects);
+
+            if (intersects.length) {
+                container.style.cursor = 'pointer';
+            } else {
+                container.style.cursor = 'default';
+            }
         }
     }
 
